@@ -1,0 +1,12 @@
+# HTTP concurrent requests for latency testing
+# Default: 5, Recommended range: 1-10
+max_concurrent_requests = 5
+
+# User-defined registry list
+[custom_registries]
+
+# Custom registry example
+# [custom_registries.example] # Registry name
+# url = "https://example.com"  # Registry URL
+# home = "https://example.com" # Registry homepage (optional)
+# description = "example"      # Registry description (optional)
