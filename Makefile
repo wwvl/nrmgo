@@ -31,7 +31,7 @@ build-platform:
 	@echo "Building for $(GOOS)/$(GOARCH)..."
 	@mkdir -p $(OUT_DIR)/$(BINARY)-$(GOOS)-$(GOARCH)
 	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) go build $(GO_FLAGS) -ldflags "$(GO_LDFLAGS)" \
-		-o $(OUT_DIR)/$(BINARY)-$(GOOS)-$(GOARCH)/$(BINARY)$(if $(filter windows,$(GOOS)),.exe,)
+		-o $(OUT_DIR)/$(BINARY)-$(GOOS)-$(GOARCH)/$(BINARY)$(if $(filter windows,$(GOOS)),.exe,) ./cmd/nrmgo
 	@cp $(CONFIG_FILE) $(OUT_DIR)/$(BINARY)-$(GOOS)-$(GOARCH)/
 
 # 构建当前平台

@@ -2,10 +2,10 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    # branches: [main]
     tags: ["v*.*.*"]
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #   branches: [main]
 
 jobs:
   golangci:
@@ -33,6 +33,10 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: stable
+      - name: Initialize Go module
+        run: |
+          go mod init nrmgo
+          go mod tidy
       - name: Set Version
         id: version
         run: |
@@ -59,6 +63,7 @@ jobs:
           echo "# SHA256 Checksums" > SHA256SUMS.txt
           sha256sum *.zip *.tar.gz >> SHA256SUMS.txt
       - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |
@@ -68,5 +73,33 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+          body: |
+            ## What's Changed
+
+            ### Features
+            - Add support for bun package manager
+            - Add `backup` command for configuration file backup and restoration
+            - Add `config` command for configuration file initialization and viewing
+            - Add automatic retry mechanism to improve network request stability
+
+            ### Enhancements
+            - Optimize registry latency testing algorithm
+            - Improve readability of error messages
+            - Optimize command execution concurrency control
+            - Improve configuration file read/write performance
+
+            ### Bug Fixes
+            - Fix path parsing issues on Windows systems
+            - Fix memory leaks during concurrent requests
+
+            ## Installation
+
+            Download the appropriate version for your platform from the releases page:
+
+            - Windows: `nrmgo-windows-*.zip`
+            - macOS: `nrmgo-darwin-*.tar.gz`
+            - Linux: `nrmgo-linux-*.tar.gz`
+
+            Verify the SHA256 checksum of the downloaded file against `SHA256SUMS.txt`.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
